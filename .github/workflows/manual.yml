@@ -1,38 +1,45 @@
-name: Workflow
-'on':
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch: null
+# .github/workflows/ci.yml
+
+name: Java CI
+
+ 
+
+on:
+
+push:
+
+   branches: [ "main" ]
+
+pull_request:
+
+   branches: [ "main" ]
+
+ 
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: List contents
-        run: ls
-      - name: compile classes
-        working-directory: ./src
-        run: >-
-          javac -cp
-          "../testresources/junit-platform-console-standalone-1.6.0.jar"
-          "./registrationasignment_new/Login.java" "./registrationasignment_new/Task.java"
-          
-      - name: List contents of src directory after compile
-        working-directory: ./src/registrationasignment_new
-        run: ls
-        
-      - name: copy compiled classes to testresources directory
-        working-directory: ./src/registrationasignment_new
-        run: cp -t  "../../test/registrationasignment_new" Login.class Task.class
-        
-      - name: copy compiled Test classes to testresources directory
-        working-directory: ./test/registrationasignment_new
-        run: cp -t  "../../test/" Login.class Task.class
-        
-      - name: List contents test package
-        working-directory: ./test/registrationasignment_new
-        run: ls
+
+build:
+
+ 
+
+   runs-on: ubuntu-latest
+
+ 
+
+   steps:
+
+   - uses: actions/checkout@v4
+
+   - name: Set up JDK 22
+
+     uses: actions/setup-java@v3
+
+     with:
+
+       java-version: '21'
+
+       distribution: 'temurin'
+
+   - name: Build with Ant
+
+     run: ant -noinput -buildfile build.xml
