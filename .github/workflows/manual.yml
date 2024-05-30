@@ -1,41 +1,45 @@
-name: Workflow
+# .github/workflows/ci.yml
 
-'on':
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch: null
+name: Java CI
+
+ 
+
+on:
+
+push:
+
+   branches: [ "main" ]
+
+pull_request:
+
+   branches: [ "main" ]
+
+ 
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+build:
 
-      - name: List contents
-        run: ls
+ 
 
-      - name: Compile classes
-        working-directory: ./src
-        run: |
-          javac -cp "../testresources/junit-platform-console-standalone-1.6.0.jar" registrationasignment_new/registrationasignment_new.java packageName/Login.java packageName/Task.java ../test/registrationasignment_new/TaskTest.java
+   runs-on: ubuntu-latest
 
-      - name: List contents of src directory after compile
-        working-directory: ./src/registrationasignment_new
-        run: ls
+ 
 
-      - name: Create testresources/registrationasignment_new directory
-        run: mkdir -p ./testresources/registrationasignment_new
+   steps:
 
-      - name: Copy compiled classes to testresources directory
-        run: cp ./src/registrationasignment_new/registrationasignment_new.class ./src/packageName/Login.class ./src/packageName/Task.class ./testresources/registrationasignment_new/
+   - uses: actions/checkout@v4
 
-      - name: Copy compiled Test classes to testresources directory
-        run: cp ./test/registrationasignment_new/TaskTest.class ./testresources/registrationasignment_new/
+   - name: Set up JDK 11
 
-      - name: List contents of testresources/registrationasignment_new directory
-        run: ls ./testresources/registrationasignment_new
+     uses: actions/setup-java@v3
+
+     with:
+
+       java-version: '11'
+
+       distribution: 'temurin'
+
+   - name: Build with Ant
+
+     run: ant -noinput -buildfile build.xml
